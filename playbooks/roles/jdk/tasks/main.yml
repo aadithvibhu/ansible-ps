@@ -1,0 +1,26 @@
+---
+- name: Create jdk Directory
+  file:
+   path: "/{{ base_dir }}/java/1.8"
+   state: directory
+   recurse: yes
+   mode: 0755
+   owner: "{{ tomcat_user }}"
+   group: "{{ tomcat_user_grp }}"
+
+
+- name: Download Java Package
+  shell: "./s3fetch.sh binaries {{ jdk8_file }} {{ download_location }}"
+  args:
+    chdir: "/tmp/"
+    warn: false
+  become_user: "{{ tomcat_user }}"
+
+- name: Install java
+  unarchive:
+   src: "{{ download_location }}/{{ jdk8_file }}"
+   dest: "/{{ base_dir }}/java/1.8"
+   copy: no
+  owner: "{{ tomcat_user }}"
+  group: "{{ tomcat_user_grp }}"
+

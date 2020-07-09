@@ -1,0 +1,25 @@
+---
+- name: create usergroup
+  group:
+   name: "{{tomcat_user_grp }}"
+   state: present
+  become: true
+
+- name: create user
+  user:
+   name: "{{ tomcat_user }}"
+   state: present
+   createhome: yes
+   group: "{{ tomcat_user_grp }}"
+   generate_ssh_key: yes
+  become: true
+  
+- name: copy ssh keys
+  copy:
+   src: "{{ remote_user_home }}/.ssh/authorized_keys"
+   dest: "{{ tomcat_user_home }}/.ssh/authorized_keys"
+   remote_src: true
+   owner: "{{ tomcat_user }}"
+   group: "{{ tomcat_user_grp }}"
+   mode: 0644
+  become: true

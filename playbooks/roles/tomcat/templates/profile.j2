@@ -1,0 +1,12 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# User specific aliases and functions
+TOMCAT_HOME={{ base_Dir }}/{{ tomcat_dir }}
+JAVA_HOME={{ java_home }}
+export JAVA_HOME TOMCAT_HOME
+export PATH=$JAVA_HOME/bin:$TOMCAT_HOME/bin:$PATH

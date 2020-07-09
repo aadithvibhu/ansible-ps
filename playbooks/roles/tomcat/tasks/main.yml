@@ -1,0 +1,37 @@
+---
+- name: Create Tomcat Directory
+  file:
+   path: "/{{ base_dir }}/"
+   state: directory
+   recurse: yes
+   mode: 0755
+   owner: "{{ tomcat_user }}"
+   group: "{{ tomcat_user_grp }}"
+
+- name: Download Tomcat Package
+  shell: "./s3fetch.sh binaries {{ tomcat9_file }} {{ download_location }}"
+  args:
+    chdir: "/tmp/"
+    warn: false
+    become_user: "{{ tomcat_user }}"
+
+- name: Install Tomcat
+  unarchive:
+   src: "{{ download_location }}/{{ tomcat9_file }}"
+   dest: "/{{ base_dir }}/"
+   copy: no
+   owner: "{{ tomcat_user }}"
+   group: "{{ tomcat_user_grp }}"
+
+- name: rename tomcat dirctory
+  shell: mv apache*tomcat* tomcat
+  args:
+   chdir: "{{ base_dir }}"
+
+- name: Setting Tomcat user profile
+  template:
+   src: profile.j2
+   dest: "{{ tomcat_user_home }}/.bashrc"
+   mode: 0750
+   owner: "{{ tomcat_user }}"
+   group: "{{ tomcat_user_grp }}"

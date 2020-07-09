@@ -1,0 +1,5 @@
+---
+- include: tomcat.yml
+  when: remote_server == 'appserver'
+- include: apache.yml
+  when: remote_server == 'webserver'

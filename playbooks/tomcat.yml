@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local 
+  become: true
+  roles:
+   - name: user-setup
+   - name: pre-requisties
+   - name: jdk
+   - name: tomcat

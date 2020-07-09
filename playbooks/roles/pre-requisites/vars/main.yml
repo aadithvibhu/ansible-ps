@@ -1,0 +1,36 @@
+---
+## Python Packages 
+#-----------------------
+pip_file: "pip-19.2.2.tar.gz"
+setuptools_file: "setuptools-41.1.0.zip"
+mysql_file: "MySQL-python-1.2.5.zip"
+awscli_package: "awscli-1.16.218.tar.gz"
+pexpect_file : "pexpect-4.7.0.tar.gz"
+python_packages:
+      - "pip-19.2.2.tar.gz"
+      - "pexpect-4.7.0.tar.gz"
+      - "boto3-1.9.207.tar.gz"
+      - "setuptools-41.1.0.zip"
+      - "s3transfer-0.2.1.tar.gz"
+      - "future-0.17.1.tar.gz"
+      - "jmespath-0.9.4.tar.gz"
+      - "botocore-1.12.207.tar.gz"
+
+system_packages:
+      - "ksh"
+      - "csh"
+      - "dos2unix"
+      - "vim"
+      - "zip"
+      - "compat-libstdc++-33.x86_64"
+      - "unzip"
+      - "tar"
+      - "bzip2"
+      - "python-setuptools"
+      - "postgresql-devel"
+      - "gcc"
+      - "python-devel"
+      - "libyaml"
+      - "python-pip"
+
+download_location: "{{ base_dir }}/src"
