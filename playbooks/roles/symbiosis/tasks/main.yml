@@ -1,0 +1,81 @@
+---
+# - name: set host list
+#   set_fact:  
+#     db_host: "{{ item }}"
+#   with_inventory_hostnames:
+#       - mysqldb
+# - debug: msg={{ db_host }}
+#   become: true
+
+- name: register ip address
+  shell: hostname -i
+  register: host_ip
+- debug: var=host_ip
+
+- name: upgrade all packages
+  shell: yum update -y
+  args:
+   warn: false 
+
+- name: ensure a list of packages installed
+  yum:
+   name: "{{ packages }}"
+
+- name: install amazon extras
+  shell: amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2
+
+- name: set host list
+  set_fact:  
+    db_host: "{{ item }}"
+  with_inventory_hostnames:
+      - database
+- debug: "msg={{ db_host }}"
+  become: true
+  ignore_errors: true
+
+
+- name: Create a new database with name {{ db_name }}
+  mysql_db:
+   name: "{{ db_name }}"
+   state: present
+   login_user: "{{ db_user }}"
+   login_password: "{{ db_password }}"
+   login_host: "{{ db_host }}"
+   login_port: "{{ dba_Port }}"
+
+
+- name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
+  mysql_user:
+   name: "{{ db_user }}"
+   password: "{{ db_pass }}"
+   priv: "bname.*:ALL,GRANT"
+   state: present
+   login_host: "{{ db_host }}"
+   login_user: "{{ db_user }}"
+   login_password: "{{ db_password }}"
+   login_port: "{{ dba_Port }}"
+
+- name: generate table.sql
+  template:
+   src: create_table.j2
+   dest: /tmp/table.sql
+   mode: 0777
+
+- name: Import table.sql
+  mysql_db:
+    state: import
+    name: all
+    target: /tmp/table.sql
+
+######################
+- name: Update Applicaton configuration
+  template:
+   src: config.j2
+   dest: /apps/symbiosys/config.js
+   mode: 0755
+
+- name: Update Applicaton configuration
+  template:
+   src: app.j2
+   dest: /apps/symbiosys/app.js
+   mode: 0755

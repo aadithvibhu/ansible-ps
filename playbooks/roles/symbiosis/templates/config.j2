@@ -1,0 +1,15 @@
+var config = {
+    database: {
+        host: "\'{{ db_host }}\'",     // database host
+        user: "\'{{ db_user }}\'",         // your database username
+        password: "\'{{ db_password }}\'",         // your database password
+        port: "\'{{ db_port }}\'",         // default MySQL port
+        db: "\'{{ db_name }}\'"         // your database name
+    },
+    server: {
+        host: "\'{{ host_ip }}\'",
+        port: "\'{{ web_port }}\'"
+    }
+}
+ 
+module.exports = config

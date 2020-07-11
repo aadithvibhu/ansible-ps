@@ -4,6 +4,4 @@
   become: true
   roles:
    - name: pre-requisties
-   - name: mysql
-   - name: docker
-
+   - name: symbiosis
