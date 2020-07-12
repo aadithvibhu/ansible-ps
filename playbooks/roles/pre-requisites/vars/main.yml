@@ -5,6 +5,7 @@ pip_file: "pip-19.2.2.tar.gz"
 setuptools_file: "setuptools-41.1.0.zip"
 awscli_package: "awscli-1.16.218.tar.gz"
 pexpect_file : "pexpect-4.7.0.tar.gz"
+mysql_file: "PyMySQL-0.9.3.tar.gz"
 python_packages:
       - "pip-19.2.2.tar.gz"
       - "pexpect-4.7.0.tar.gz"

@@ -44,7 +44,7 @@
   copy:
    src: "{{ awscli_package }}"
    dest: "{{ download_location }}/{{ awscli_package }}"
-   when: ((aws_check.stdout.find('no aws in') != -1)or(aws_check.stderr.find('no aws in') != -1))
+  when: ((aws_check.stdout.find('no aws in') != -1)or(aws_check.stderr.find('no aws in') != -1))
 
 - name: Unarchive pip tar
   unarchive:
@@ -108,6 +108,12 @@
 - name: Unarchive setup Tools zip file
   unarchive:
    src: "{{ download_location }}/{{ setuptools_file }}"
+   dest: "{{ download_location }}"
+   remote_src: yes
+
+- name: Unarchive setup Tools zip file
+  unarchive:
+   src: "{{ download_location }}/{{ mysql_file }}"
    dest: "{{ download_location }}"
    remote_src: yes
 
