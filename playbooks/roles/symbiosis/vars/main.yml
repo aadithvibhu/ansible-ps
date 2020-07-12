@@ -3,10 +3,12 @@ db_name: "test"
 db_port: "3306"
 web_port: "3000"
 #### Below Credentials can be encrypted using ansible-vault"
+test_db_user: "test"
+test_db_pass: "test123"
 db_user: "admin"
 db_password: "admin123"
 db_host: "mysqldb.c0rokoprkqfc.ap-southeast-1.rds.amazonaws.com"
 
-
-
-
+app_dir: "/apps/symbiosis"
+packages:
+   - mysql

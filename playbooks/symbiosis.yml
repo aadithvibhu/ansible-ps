@@ -3,5 +3,5 @@
   connection: local 
   become: true
   roles:
-   - name: pre-requisties
+          #   - name: pre-requisites
    - name: symbiosis

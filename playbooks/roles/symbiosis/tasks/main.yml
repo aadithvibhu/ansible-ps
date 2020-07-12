@@ -1,12 +1,4 @@
 ---
-# - name: set host list
-#   set_fact:  
-#     db_host: "{{ item }}"
-#   with_inventory_hostnames:
-#       - mysqldb
-# - debug: msg={{ db_host }}
-#   become: true
-
 - name: register ip address
   shell: hostname -i
   register: host_ip
@@ -33,49 +25,56 @@
   become: true
   ignore_errors: true
 
-
-- name: Create a new database with name {{ db_name }}
+- name: Create a new database with name "{{ db_name }}"
   mysql_db:
    name: "{{ db_name }}"
    state: present
    login_user: "{{ db_user }}"
    login_password: "{{ db_password }}"
    login_host: "{{ db_host }}"
-   login_port: "{{ dba_Port }}"
-
+   login_port: "{{ db_port }}"
 
 - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
   mysql_user:
-   name: "{{ db_user }}"
-   password: "{{ db_pass }}"
+   name: "{{ test_db_user }}"
+   password: "{{ test_db_pass }}"
    priv: "bname.*:ALL,GRANT"
    state: present
    login_host: "{{ db_host }}"
    login_user: "{{ db_user }}"
    login_password: "{{ db_password }}"
-   login_port: "{{ dba_Port }}"
+   login_port: "{{ db_port }}"
 
 - name: generate table.sql
   template:
-   src: create_table.j2
-   dest: /tmp/table.sql
+   src: "create_database.j2"
+   dest: "/tmp/table.sql"
    mode: 0777
 
 - name: Import table.sql
   mysql_db:
-    state: import
-    name: all
-    target: /tmp/table.sql
+   state: import
+   name: all
+   target: "/tmp/table.sql"
+   login_host: "{{ db_host }}"
+   login_user: "{{ db_user }}"
+   login_password: "{{ db_password }}"
+   login_port: "{{ db_port }}"
+  ignore_errors: yes
 
 ######################
 - name: Update Applicaton configuration
   template:
    src: config.j2
-   dest: /apps/symbiosys/config.js
+   dest: "{{ app_dir }}/config.js"
    mode: 0755
 
 - name: Update Applicaton configuration
   template:
    src: app.j2
-   dest: /apps/symbiosys/app.js
+   dest: "{{ app_dir }}/app.js"
    mode: 0755
+
+- name: start the Application
+  shell: "nohup node --inspect {{ app_dir }}/app.js &"
+
